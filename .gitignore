@@ -1,0 +1,53 @@
+*.iml
+.gradle
+/local.properties
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+
+
+# Built application files
+*.apk
+*.aab
+*.aar
+*.ap_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+app/build/
+*/build/
+
+# Gradle files
+buildOutputCleanup/
+
+# Android Studio and IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.shelf/
+
+# Keep Google Services configuration files if using them, but ignore private signing keys
+*.jks
+*.keystore
+
+# macOS & OS-generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+captures/
