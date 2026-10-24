@@ -1,13 +1,15 @@
 package siddu.farkle.zombie
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.webkit.ConsoleMessage
+import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 
@@ -28,16 +30,34 @@ class MainActivity : AppCompatActivity() {
         settings.allowFileAccess = true
         settings.allowContentAccess = true
 
-        // CRITICAL FOR API 30+: Allows local HTML to read local JS, CSS, and Fonts
         @Suppress("DEPRECATION")
         settings.allowFileAccessFromFileURLs = true
         @Suppress("DEPRECATION")
         settings.allowUniversalAccessFromFileURLs = true
 
-        // Forward JavaScript console errors to Android Studio Logcat
+        // WebChromeClient with Console Logcat forwarding and native Dialog support for alert/confirm
         webView.webChromeClient = object : WebChromeClient() {
             override fun onConsoleMessage(message: ConsoleMessage): Boolean {
-                Log.d("FarkleWebViewJS", "${message.message()} -- From line ${message.lineNumber()} of ${message.sourceId()}")
+                Log.d("FarkleWebViewJS", "${message.message()} -- line ${message.lineNumber()}")
+                return true
+            }
+
+            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(this@MainActivity)
+                    .setMessage(message)
+                    .setPositiveButton("OK") { _, _ -> result?.confirm() }
+                    .setCancelable(false)
+                    .show()
+                return true
+            }
+
+            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(this@MainActivity)
+                    .setMessage(message)
+                    .setPositiveButton("OK") { _, _ -> result?.confirm() }
+                    .setNegativeButton("Cancel") { _, _ -> result?.cancel() }
+                    .setCancelable(false)
+                    .show()
                 return true
             }
         }
